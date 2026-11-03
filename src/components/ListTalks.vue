@@ -17,6 +17,9 @@ function daysLeft(date: string) {
 </script>
 
 <template>
+  <p v-if="!talks.length" class="my-12 text-center opacity-50">
+    暂无演讲，敬请期待。
+  </p>
   <template v-for="talk, idx of talks" :key="idx">
     <div v-if="!englishOnly || !talk.lang || talk.lang === 'en'">
       <div v-if="idx !== 0" pt4>
