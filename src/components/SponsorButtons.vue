@@ -7,7 +7,7 @@
   <p flex="~ gap-2 wrap items-center">
     <SponsorButtonCollective />
     <span op50 text-sm>
-      <a href="/posts/sponsorship-forwarding" target="_blank">How does this work?</a>
+      <a href="https://antfu.me/posts/sponsorship-forwarding" target="_blank">How does this work?</a>
     </span>
   </p>
   <p flex="~ gap-2 wrap">

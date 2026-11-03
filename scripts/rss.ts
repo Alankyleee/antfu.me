@@ -44,7 +44,7 @@ async function buildBlogRSS() {
           const raw = await fs.readFile(i, 'utf-8')
           const { data, content } = matter(raw)
 
-          if (data.lang !== 'en')
+          if (data.lang !== 'en' || !(data.type || 'blog').split('+').includes('blog'))
             return
 
           const html = markdown.render(content)
