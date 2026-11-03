@@ -13,6 +13,7 @@ interface RemarkInstance {
 interface RemarkApi {
   createInstance: (config: Record<string, unknown>) => RemarkInstance
   changeTheme: (theme: 'dark' | 'light') => void
+  destroy?: () => void
 }
 
 const host = (import.meta.env.VITE_REMARK42_HOST || '').replace(/\/$/, '')
@@ -27,19 +28,28 @@ function api() {
   return (window as Window & { REMARK42?: RemarkApi }).REMARK42
 }
 
-function mountComments() {
-  if (!active || !container.value || !api())
-    return
-  instance?.destroy()
-  instance = api()!.createInstance({
-    node: container.value,
+function configuration() {
+  return {
     host,
     site_id: siteId,
     url: props.url,
     page_title: props.title,
     locale: 'zh',
     theme: isDark.value ? 'dark' : 'light',
-  })
+  }
+}
+
+function mountComments() {
+  const sdk = api()
+  if (!active || !container.value || !sdk)
+    return
+  // The published embed script creates its first instance before emitting ready.
+  if (!instance && container.value.querySelector('iframe[data-remark42-iframe]') && sdk.destroy) {
+    instance = { destroy: sdk.destroy }
+    return
+  }
+  instance?.destroy()
+  instance = sdk.createInstance(configuration())
 }
 
 function onError() {
@@ -49,6 +59,7 @@ function onError() {
 
 onMounted(() => {
   active = true
+  ;(window as Window & { remark_config?: Record<string, unknown> }).remark_config = configuration()
   window.addEventListener('REMARK42::ready', mountComments)
   if (api()) {
     mountComments()
@@ -83,7 +94,7 @@ onBeforeUnmount(() => {
     <p v-if="failed" role="status" class="opacity-60">
       评论暂时无法加载，请稍后刷新页面重试。
     </p>
-    <div ref="container">
+    <div id="remark42" ref="container">
       <p v-if="!failed" class="opacity-60">
         正在加载评论…
       </p>
