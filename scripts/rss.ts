@@ -6,10 +6,9 @@ import fs from 'fs-extra'
 import matter from 'gray-matter'
 import MarkdownIt from 'markdown-it'
 
-const DOMAIN = 'https://antfu.me'
+const DOMAIN = 'https://alankyle.com'
 const AUTHOR = {
-  name: 'Anthony Fu',
-  email: 'hi@antfu.me',
+  name: 'Alankyle',
   link: DOMAIN,
 }
 const markdown = MarkdownIt({
@@ -26,15 +25,15 @@ async function buildBlogRSS() {
   const files = await fg('pages/posts/*.md')
 
   const options = {
-    title: 'Anthony Fu',
-    description: 'Anthony Fu\' Blog',
-    id: 'https://antfu.me/',
-    link: 'https://antfu.me/',
-    copyright: 'CC BY-NC-SA 4.0 2021 © Anthony Fu',
+    title: 'Alankyle',
+    description: 'Alankyle 的博客',
+    id: 'https://alankyle.com/',
+    link: 'https://alankyle.com/',
+    copyright: '© Alankyle',
     feedLinks: {
-      json: 'https://antfu.me/feed.json',
-      atom: 'https://antfu.me/feed.atom',
-      rss: 'https://antfu.me/feed.xml',
+      json: 'https://alankyle.com/feed.json',
+      atom: 'https://alankyle.com/feed.atom',
+      rss: 'https://alankyle.com/feed.xml',
     },
   }
   const posts: any[] = (
@@ -71,8 +70,8 @@ async function buildBlogRSS() {
 
 async function writeFeed(name: string, options: FeedOptions, items: Item[]) {
   options.author = AUTHOR
-  options.image = 'https://antfu.me/avatar.png'
-  options.favicon = 'https://antfu.me/logo.png'
+  options.image = 'https://alankyle.com/og.png'
+  options.favicon = 'https://alankyle.com/favicon.svg'
 
   const feed = new Feed(options)
 

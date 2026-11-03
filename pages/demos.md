@@ -1,11 +1,7 @@
 ---
-title: Demos - Anthony Fu
+title: Demos - Alankyle
 display: Demos
-subtitle: Demonstrations for projects I am working on from Tweets
-description: Demonstrations for projects I am working on from Tweets
 art: dots
 ---
 
-<!-- @layout-full-width -->
-
-<ListDemos />
+<p class="my-12 text-center opacity-50">暂无演示，敬请期待。</p>
