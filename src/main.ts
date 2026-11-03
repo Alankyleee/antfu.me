@@ -4,6 +4,7 @@ import FloatingVue from 'floating-vue'
 import NProgress from 'nprogress'
 import { createPinia } from 'pinia'
 import { ViteSSG } from 'vite-ssg'
+import { nextTick } from 'vue'
 import { setupRouterScroller } from 'vue-router-better-scroller'
 import { routes } from 'vue-router/auto-routes'
 import App from './App.vue'
@@ -52,8 +53,22 @@ export const createApp = ViteSSG(
       router.beforeEach(() => {
         NProgress.start()
       })
-      router.afterEach(() => {
+      router.afterEach(async (to, from, failure) => {
         NProgress.done()
+
+        // count.js handles the initial page view. Count subsequent SPA navigations.
+        if (failure || !from.matched.length || to.path === from.path)
+          return
+
+        await nextTick()
+        const goatcounter = (window as Window & {
+          goatcounter?: { count?: (page: { path: string, title: string, referrer: string }) => void }
+        }).goatcounter
+        goatcounter?.count?.({
+          path: to.path,
+          title: document.title,
+          referrer: new URL(from.path, window.location.origin).href,
+        })
       })
     }
   },
