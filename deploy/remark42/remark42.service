@@ -1,0 +1,23 @@
+[Unit]
+Description=Remark42 comments for alankyle.com
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=remark42
+Group=remark42
+WorkingDirectory=/opt/remark42
+EnvironmentFile=/opt/remark42/.env
+ExecStart=/opt/remark42/remark42.linux-amd64 server
+Restart=on-failure
+RestartSec=5
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+ReadWritePaths=/opt/remark42/var
+
+[Install]
+WantedBy=multi-user.target

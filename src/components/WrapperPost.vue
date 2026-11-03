@@ -11,6 +11,7 @@ const { frontmatter } = defineProps({
 const router = useRouter()
 const route = useRoute()
 const content = ref<HTMLDivElement>()
+const commentsEnabled = !!import.meta.env.VITE_REMARK42_HOST
 
 const base = 'https://antfu.me'
 const tweetUrl = computed(() => `https://twitter.com/intent/tweet?text=${encodeURIComponent(`Reading @antfu7\'s ${base}${route.path}\n\nI think...`)}`)
@@ -137,6 +138,13 @@ const ArtComponent = computed(() => {
   >
     <slot />
   </article>
+  <ClientOnly v-if="commentsEnabled && route.path.startsWith('/posts/') && !frontmatter.draft && frontmatter.comments !== false">
+    <RemarkComments
+      :key="route.path"
+      :url="`https://alankyle.com${route.path}`"
+      :title="frontmatter.title || frontmatter.display || route.path"
+    />
+  </ClientOnly>
   <div v-if="route.path !== '/'" class="prose m-auto mt-8 mb-8 slide-enter animate-delay-500 print:hidden">
     <template v-if="frontmatter.duration">
       <span font-mono op50>> </span>

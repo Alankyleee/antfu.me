@@ -4,6 +4,8 @@ command = "pnpm run build"
 
 [build.environment]
 NODE_VERSION = "22"
+VITE_REMARK42_HOST = "https://comments.alankyle.com"
+VITE_REMARK42_SITE_ID = "alankyle"
 
 [[headers]]
 for = "/assets/*"
